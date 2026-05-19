@@ -1,0 +1,21 @@
+
+# База данных
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# macOS
+.DS_Store
+
+# Виртуальное окружение
+venv/
+env/
+
+git add .gitignore
+git commit -m "Add gitignore file"
+git log --oneline
+
