@@ -1284,3 +1284,4 @@ if __name__ == '__main__':
     print(f"🌐 Admin panel: http://127.0.0.1:8000/admin")
     print("Stop: Ctrl+C\n")
     bot.infinity_polling(timeout=10, long_polling_timeout=5)
+    
