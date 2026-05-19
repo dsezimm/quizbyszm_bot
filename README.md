@@ -1,94 +1,148 @@
-# 🤖 Programming Quiz Bot — Этап 2
+# 🤖 Programming Quiz Bot
 
-Telegram-бот для квизов по Python и SQL с Django-бэкендом.
+A Telegram bot for testing knowledge in **Python** and **SQL**, built with `pyTelegramBotAPI` and `Django`.
 
-## 📁 Структура проекта
+> 📚 Academic project — Stage 2
+
+---
+
+## ✨ Features
+
+- Interactive quiz with **5 questions** per topic (Python or SQL)
+- Inline buttons for topic selection and answering (A / B / C / D)
+- Every user request is saved to a **Django database**
+- **Django Admin panel** to view all requests and reply to users
+- Quiz results stored with score, percentage, and time spent
+
+---
+
+## 🛠️ Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| `pyTelegramBotAPI` | Telegram Bot API integration |
+| `Django 4.2` | Backend + ORM + Admin panel |
+| `SQLite` | Database |
+| `Python 3.x` | Main language |
+
+---
+
+## 📁 Project Structure
 
 ```
 quiz_bot/
-├── requirements.txt          # Зависимости
+├── requirements.txt
+├── README.md
 ├── bot/
-│   └── bot.py                # Telegram-бот (pyTelegramBotAPI)
+│   └── bot.py              # Telegram bot logic
 └── quiz_django/
-    ├── manage.py             # Django CLI
-    ├── quiz_django/          # Настройки Django
+    ├── manage.py
+    ├── quiz_django/
     │   ├── settings.py
     │   └── urls.py
-    └── quiz_app/             # Django приложение
-        ├── models.py         # Модели: UserQuery, QuizResult
-        └── admin.py          # Настройка админ-панели
+    └── quiz_app/
+        ├── models.py       # UserQuery, QuizResult models
+        ├── admin.py        # Admin panel configuration
+        └── migrations/
 ```
 
-## 🚀 Установка и запуск
+---
 
-### 1. Установить зависимости
+## 🗄️ Database Models
+
+### `UserQuery`
+Stores every message sent to the bot:
+
+| Field | Description |
+|-------|-------------|
+| `telegram_id` | User's Telegram ID |
+| `username` | Telegram username |
+| `command` | Command used (`/start`, `/quiz`, etc.) |
+| `message_text` | Full message text |
+| `admin_reply` | Support reply from admin |
+| `status` | `new` / `answered` / `closed` |
+| `created_at` | Timestamp |
+
+### `QuizResult`
+Stores quiz results:
+
+| Field | Description |
+|-------|-------------|
+| `topic` | `python` or `sql` |
+| `score` | Correct answers |
+| `total` | Total questions |
+| `percentage` | Score percentage |
+| `time_spent` | Time in seconds |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/dsezimm/quiz-bot.git
+cd quiz-bot
+```
+
+### 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Применить миграции Django
+### 3. Apply migrations
 ```bash
 cd quiz_django
-python manage.py makemigrations quiz_app
 python manage.py migrate
 ```
 
-### 3. Создать суперпользователя для админки
+### 4. Create admin user
 ```bash
 python manage.py createsuperuser
 ```
 
-### 4. Запустить Django-сервер (в одном терминале)
+### 5. Add your bot token
+Open `bot/bot.py` and replace:
+```python
+BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
+```
+Get your token from [@BotFather](https://t.me/BotFather) on Telegram.
+
+### 6. Run Django server (Terminal 1)
 ```bash
 python manage.py runserver
 ```
 
-### 5. Вставить токен бота и запустить (в другом терминале)
-Открыть `bot/bot.py` и заменить:
-```python
-BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
-```
-на токен от [@BotFather](https://t.me/BotFather).
-
+### 7. Run the bot (Terminal 2)
 ```bash
 cd bot
-BOT_TOKEN=ваш_токен python bot.py
+python bot.py
 ```
 
-## 🌐 Админ-панель
+---
 
-Открыть: http://127.0.0.1:8000/admin
+## 💬 Bot Commands
 
-- **Запросы пользователей** — все сообщения из бота, фильтрация по статусу
-- **Результаты квизов** — история прохождений с процентами
-- Поддержка: заполните поле "Ответ администратора" и смените статус на "Отвечен"
+| Command | Description |
+|---------|-------------|
+| `/start` | Welcome message |
+| `/help` | Help and instructions |
+| `/quiz` | Start a new quiz |
+| `/score` | View your last 5 results |
+| `/stats` | Global bot statistics |
+| any message | Saved as support request |
 
-## 📋 Команды бота
+---
 
-| Команда | Описание |
-|---------|----------|
-| `/start` | Приветствие и список команд |
-| `/help` | Подробная помощь |
-| `/quiz` | Начать квиз (выбор темы) |
-| `/score` | Последние 5 результатов |
-| `/stats` | Общая статистика бота |
-| любое сообщение | Запрос в поддержку |
+## 🌐 Admin Panel
 
-## 🗄️ Модели Django
+Open in browser: [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
-### UserQuery
-Сохраняет каждый запрос пользователя:
-- `telegram_id`, `username`, `first_name`, `last_name`
-- `command` — тип команды (`/start`, `/quiz`, `message`, `answer`, ...)
-- `message_text` — текст сообщения
-- `admin_reply` — ответ поддержки
-- `status` — новый / отвечен / закрыт
-- `created_at`, `updated_at`
+- View all user requests with filters by status and command
+- Reply to user questions via `admin_reply` field
+- Track quiz results with visual percentage bars
 
-### QuizResult
-Итоги каждого пройденного квиза:
-- `telegram_id`, `username`
-- `topic` — python / sql
-- `score`, `total`, `percentage`
-- `time_spent`
-- `completed_at`
+---
+
+## 👤 Author
+
+**dsezimm** — [github.com/dsezimm](https://github.com/dsezimm)
